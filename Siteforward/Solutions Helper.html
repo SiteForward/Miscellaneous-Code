@@ -1,99 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link href="https://toplinefinancial.ca/assets/frameworks/assets/dist/css/global.css" rel="stylesheet">
-    <link href="https://toplinefinancial.ca/assets/frameworks/themes/fresnel/3.0.0/assets/dist/css/main.css"
-        rel="stylesheet">
+    <link href="https://toplinefinancial.ca/assets/frameworks/assets/dist/css/global.css" rel="stylesheet" />
+    <link href="https://toplinefinancial.ca/assets/frameworks/themes/fresnel/3.0.0/assets/dist/css/main.css" rel="stylesheet" />
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" />
 
     <script type="module">
-        let season = []
-        let year = "2022"
-        let articleWrapper = document.querySelector("#articles")
-        let articlesToHide = 0
+      let season = [];
+      let year = "2022";
+      let articleWrapper = document.querySelector("#articles");
+      let articlesToHide = 0;
 
-        if (!window.supress)
-            window.addEventListener('load', (event) => {
+      if (!window.supress)
+        window.addEventListener("load", (event) => {
+          document.querySelector("#generateSnippets").addEventListener("click", () => {
+            let solutionsURLEnglish = document.querySelector("#solutionsURL-english").value + "/feed.xml";
+            let solutionsURLFrench = document.querySelector("#solutionsURL-french").value + "/feed.xml";
 
-                document.querySelector("#generateSnippets").addEventListener('click', () => {
+            let seasonEnglish = solutionsURLEnglish.substring(solutionsURLEnglish.indexOf(".ca/") + 4, solutionsURLEnglish.indexOf("-"));
+            seasonEnglish = seasonEnglish[0].toUpperCase() + seasonEnglish.substring(1, seasonEnglish.length);
 
-                    let solutionsURLEnglish = document.querySelector("#solutionsURL-english").value + '/feed.xml'
-                    let solutionsURLFrench = document.querySelector("#solutionsURL-french").value + '/feed.xml'
+            let seasonFrench = solutionsURLFrench.substring(solutionsURLFrench.indexOf(".ca/") + 4, solutionsURLFrench.indexOf("-"));
+            seasonFrench = seasonFrench[0].toUpperCase() + seasonFrench.substring(1, seasonFrench.length);
 
-                    let seasonEnglish = solutionsURLEnglish.substring(solutionsURLEnglish.indexOf(".ca/") + 4, solutionsURLEnglish.indexOf("-"))
-                    seasonEnglish = seasonEnglish[0].toUpperCase() + seasonEnglish.substring(1, seasonEnglish.length)
+            season = [seasonEnglish, seasonFrench];
+            year = solutionsURLEnglish.substr(solutionsURLEnglish.indexOf("-") + 1, 4);
+            document.querySelector("#loading-overlay").style = "position: absolute;top: 50%; left: 50%; transform: translate(-50%, -50%);";
 
-                    let seasonFrench = solutionsURLFrench.substring(solutionsURLFrench.indexOf(".ca/") + 4, solutionsURLFrench.indexOf("-"))
-                    seasonFrench = seasonFrench[0].toUpperCase() + seasonFrench.substring(1, seasonFrench.length)
-
-                    season = [seasonEnglish, seasonFrench]
-                    year = solutionsURLEnglish.substr(solutionsURLEnglish.indexOf("-") + 1, 4)
-                    document.querySelector("#loading-overlay").style = "position: absolute;top: 50%; left: 50%; transform: translate(-50%, -50%);"
-                    
-                    getFeedItems(solutionsURLEnglish).then(articles => {
-                        articles.forEach(article => {
-                            let section = createSection(article, true)
-                            articleWrapper.appendChild(section)
-                        })
-                        getFeedItems(solutionsURLFrench).then(articles => {
-                            let englishArticles = document.querySelectorAll("#articles > div")
-                            for (let i = 0; i < articles.length; i++) {
-                                let article = articles[i]
-                                let section = createSection(article, false)
-                                articleWrapper.insertBefore(section, englishArticles[i])
-                                if (i == articles.length - 1){
-                                    document.querySelector("#loading-overlay").style = "display: none;"
-                                    articleWrapper.childNodes.forEach(div => articleWrapper.insertBefore(div, articleWrapper.firstChild))
-                                    for(let i = 0; i < articlesToHide; i++){
-                                        let checkbox = articleWrapper.querySelectorAll("input[type='checkbox']")[i]
-                                        checkbox.parentNode.parentNode.parentNode.parentNode.style["max-height"] = "0px"
-                                        checkbox.checked = true
-                                    }
-                                }
-                            }
-                        })
-                    })
-
-                })
-                
-                let params = new URL(window.location.href).searchParams
-                if(Array.from(params).length){
-                    if(params.get('english')) document.querySelector("#solutionsURL-english").value = decodeURI(params.get("english"))
-                    if(params.get('french')) document.querySelector("#solutionsURL-french").value = decodeURI(params.get("french"))
-                    if(params.get('completed')) articlesToHide = params.get('completed')
-                    document.querySelector("#generateSnippets").click()
+            getFeedItems(solutionsURLEnglish).then((articles) => {
+              articles.forEach((article) => {
+                let section = createSection(article, true);
+                articleWrapper.appendChild(section);
+              });
+              getFeedItems(solutionsURLFrench).then((articles) => {
+                let englishArticles = document.querySelectorAll("#articles > div");
+                for (let i = 0; i < articles.length; i++) {
+                  let article = articles[i];
+                  let section = createSection(article, false);
+                  articleWrapper.insertBefore(section, englishArticles[i]);
+                  if (i == articles.length - 1) {
+                    document.querySelector("#loading-overlay").style = "display: none;";
+                    articleWrapper.childNodes.forEach((div) => articleWrapper.insertBefore(div, articleWrapper.firstChild));
+                    for (let i = 0; i < articlesToHide; i++) {
+                      let checkbox = articleWrapper.querySelectorAll("input[type='checkbox']")[i];
+                      checkbox.parentNode.parentNode.parentNode.parentNode.style["max-height"] = "0px";
+                      checkbox.checked = true;
+                    }
+                  }
                 }
-            })
+              });
+            });
+          });
 
-        function createSection(article, isEnglish) {
-            let index = isEnglish ? 0 : 1
-            let div = document.createElement("div")
-            let tags = [["English", "Solutions"], ["Français", "Solutions (  Français )"]]
-            let title = ['Solutions For Financial Planning*', 'Solutions pour planifier vos finances*']
-            let articleBody = article.body
-                // .replace(/&/g, "&amp;")
-                // .replace(/</g, "&lt;")
-                // .replace(/>/g, "&gt;")
-                // .replace(/'/g, "&#39;")
-                // .replace(/"/g, "&quot;")
-            let body = [
-                `<h3><a class="btn" href="${article.link}" rel="noopener noreferrer" target="_blank">Read the full article*</a></h3>
+          let params = new URL(window.location.href).searchParams;
+          if (Array.from(params).length) {
+            if (params.get("english")) document.querySelector("#solutionsURL-english").value = decodeURI(params.get("english"));
+            if (params.get("french")) document.querySelector("#solutionsURL-french").value = decodeURI(params.get("french"));
+            if (params.get("completed")) articlesToHide = params.get("completed");
+            document.querySelector("#generateSnippets").click();
+          } else {
+            fetch("https://mysolutionsonline.ca/current-issue").then((res) => {
+              document.querySelector("#solutionsURL-english").value = res.url;
+            });
+            fetch("https://mysolutionsonline.ca/ledition-actuelle").then((res) => {
+              document.querySelector("#solutionsURL-french").value = res.url;
+            });
+          }
+        });
+
+      function createSection(article, isEnglish) {
+        let index = isEnglish ? 0 : 1;
+        let div = document.createElement("div");
+        let tags = [
+          ["English", "Solutions"],
+          ["Français", "Solutions (  Français )"],
+        ];
+        let title = ["Solutions For Financial Planning*", "Solutions pour planifier vos finances*"];
+        let articleBody = article.body;
+        // .replace(/&/g, "&amp;")
+        // .replace(/</g, "&lt;")
+        // .replace(/>/g, "&gt;")
+        // .replace(/'/g, "&#39;")
+        // .replace(/"/g, "&quot;")
+        let body = [
+          `<h3><a class="btn" href="${article.link}" rel="noopener noreferrer" target="_blank">Read the full article*</a></h3>
                     <p><br></p><p><br></p><hr>
                     <p class="disclaimer">* This article opens in a new window directing you to Manulife's Solutions for Financial Planning Magazine.</p>
                     <p class="disclaimer">© 2022 Manulife. The persons and situations depicted are fictional and their resemblance to anyone living or dead is purely coincidental. This media is for information purposes only and is not intended to provide specific financial, tax, legal, accounting or other advice and should not be relied upon in that regard. Many of the issues discussed will vary by province. Individuals should seek the advice of professionals to ensure that any action taken with respect to this information is appropriate to their specific situation. E &amp; O E. Commissions, trailing commissions, management fees and expenses all may be associated with mutual fund investments. Please read the prospectus before investing. Mutual funds are not guaranteed, their values change frequently and past performance may not be repeated. Any amount that is allocated to a segregated fund is invested at the risk of the contract holder and may increase or decrease in value.</p>`,
-                `<h3><a class="btn" href="${article.link}" rel="noopener noreferrer" target="_blank">Lire l'article au complet*</a></h3>
+          `<h3><a class="btn" href="${article.link}" rel="noopener noreferrer" target="_blank">Lire l'article au complet*</a></h3>
                     <p><br></p><p><br></p><hr>
                     <p class="disclaimer">*Cet article s'ouvre dans une nouvelle fenêtre qui vous dirigera vers le revue Solutions de planification financière de Manuvie.</p>
-                    <p class="disclaimer">© 2022 Manuvie. Les personnes et les situations évoquées sont fictives et toute ressemblance avec des personnes vivantes ou décédées serait pure coïncidence. Le présent document est proposé à titre indicatif seulement. Il n’a pas pour objet de donner des conseils particuliers d’ordre financier, fiscal, juridique, comptable ou autre et les renseignements qu’il fournit ne doivent pas être considérés comme tels. Nombre des points analysés varient selon la province. Tout particulier ayant pris connaissance des renseignements formulés ici devrait s’assurer qu’ils sont appropriés à sa situation en demandant l’avis d’un spécialiste. Sauf erreurs ou omissions. La souscription de fonds communs de placement peut donner lieu au versement de commissions ou de commissions de suivi ainsi qu’au paiement de frais de gestion ou d’autres frais. Veuillez lire le prospectus des fonds avant d’effectuer un placement. Les fonds communs de placement ne sont pas garantis, leur valeur liquidative varie fréquemment et les rendements passés peuvent ne pas se reproduire. Toute somme affectée à un fonds distinct est placée aux risques du titulaire du contrat et peut prendre ou perdre de la valeur.</p>`
-            ]
-            div.innerHTML = `
+                    <p class="disclaimer">© 2022 Manuvie. Les personnes et les situations évoquées sont fictives et toute ressemblance avec des personnes vivantes ou décédées serait pure coïncidence. Le présent document est proposé à titre indicatif seulement. Il n’a pas pour objet de donner des conseils particuliers d’ordre financier, fiscal, juridique, comptable ou autre et les renseignements qu’il fournit ne doivent pas être considérés comme tels. Nombre des points analysés varient selon la province. Tout particulier ayant pris connaissance des renseignements formulés ici devrait s’assurer qu’ils sont appropriés à sa situation en demandant l’avis d’un spécialiste. Sauf erreurs ou omissions. La souscription de fonds communs de placement peut donner lieu au versement de commissions ou de commissions de suivi ainsi qu’au paiement de frais de gestion ou d’autres frais. Veuillez lire le prospectus des fonds avant d’effectuer un placement. Les fonds communs de placement ne sont pas garantis, leur valeur liquidative varie fréquemment et les rendements passés peuvent ne pas se reproduire. Toute somme affectée à un fonds distinct est placée aux risques du titulaire du contrat et peut prendre ou perdre de la valeur.</p>`,
+        ];
+        div.innerHTML = `
                 <div class="row article" style="border-bottom: 2px solid #dadada;padding-bottom: 1rem; margin-bottom: 1rem;">
                     <div class="col-xs-12 col-sm-4">
                         <div style="display: flex; flex-flow: row nowrap">
@@ -101,8 +105,12 @@
                             <div style="display: flex; flex-flow: column">
                                 <img class="article-img" style="width: 200px; object-fit: contain;" src="${article.img}">
                                 <div style="display: flex;flex-flow: row nowrap;justify-content: center;font-size: .65em;margin: 0 auto;">
-                                    <div class="tag" style="border-radius:4px;color: #fff;background: #2d2d2d;padding: 5px;margin: 2px;flex-grow: 1;text-align: center;">${tags[index][0]}</div>
-                                    <div class="tag" style="border-radius:4px;color: #fff;background: #2d2d2d;padding: 5px;margin: 2px;flex-grow: 1;text-align: center;">${tags[index][1]}</div>
+                                    <div class="tag" style="border-radius:4px;color: #fff;background: #2d2d2d;padding: 5px;margin: 2px;flex-grow: 1;text-align: center;">${
+                                      tags[index][0]
+                                    }</div>
+                                    <div class="tag" style="border-radius:4px;color: #fff;background: #2d2d2d;padding: 5px;margin: 2px;flex-grow: 1;text-align: center;">${
+                                      tags[index][1]
+                                    }</div>
                                 </div>
                             </div>
                         </div>
@@ -116,205 +124,195 @@
 
                             
                         </textarea>
-                        <input class="article-description" style="flex-basis: 100%;    border: 1px solid #dadada;" value="${(article.header).replace("<h2>", "").replace("</h2>", "")} Solutions For Financial Planning, ${season[index]} ${year}*">
+                        <input class="article-description" style="flex-basis: 100%;    border: 1px solid #dadada;" value="${article.header
+                          .replace("<h2>", "")
+                          .replace("</h2>", "")} Solutions For Financial Planning, ${season[index]} ${year}*">
                     </div>
                 </div>
-            `
-            div.style = "overflow: hidden; max-height: 500px; transition: .3s all"
+            `;
+        div.style = "overflow: hidden; max-height: 500px; transition: .3s all";
 
+        div.addEventListener("click", function (el) {
+          if (el.target.select) el.target.select();
+        });
+        div.querySelector("input[type='checkbox']").addEventListener("change", () => {
+          div.style["max-height"] = "0px";
+          let params = new URL(window.location.href).searchParams;
+          params.set("english", encodeURI(document.querySelector("#solutionsURL-english").value));
+          params.set("french", encodeURI(document.querySelector("#solutionsURL-french").value));
+          params.set("completed", ++articlesToHide);
+          var newRelativePathQuery = window.location.pathname + "?" + params.toString();
+          history.pushState(null, "", newRelativePathQuery);
+        });
 
-            div.addEventListener("click", function (el) {
-                if (el.target.select)
-                    el.target.select()
-            })
-            div.querySelector("input[type='checkbox']").addEventListener('change', () => {
-                div.style["max-height"] = "0px"
-                let params = new URL(window.location.href).searchParams
-                params.set('english', encodeURI(document.querySelector("#solutionsURL-english").value))
-                params.set('french', encodeURI(document.querySelector("#solutionsURL-french").value))
-                params.set("completed", ++articlesToHide);
-                var newRelativePathQuery = window.location.pathname + '?' + params.toString();
-                history.pushState(null, '', newRelativePathQuery);
-            })
+        return div;
+      }
 
-            return div
-        }
+      function shortenLine(string, length) {
+        if (string.length <= length) return string;
+        let spaceIndex = length;
+        while (spaceIndex < string.length && string[spaceIndex] != " ") spaceIndex++;
+        return string.substring(0, spaceIndex) + "...";
+      }
 
+      //Read all the blog posts from the feed XML function
+      async function getFeedItems(url) {
+        //Get the results of the feed XML url
+        let res = await fetch(url);
+        res = await res.text();
+        let doc = new DOMParser().parseFromString(res, "text/xml");
+        return new Promise((resolve, reject) => {
+          //Search through the XML for the item nodes
+          let channels = doc.querySelector("channel");
+          let items = channels.querySelectorAll("item");
+          let posts = [];
 
-        function shortenLine(string, length) {
-            if (string.length <= length) return string
-            let spaceIndex = length
-            while (spaceIndex < string.length && string[spaceIndex] != ' ') spaceIndex++
-            return string.substring(0, spaceIndex) + '...'
-        }
+          let itemPromises = [];
 
-        //Read all the blog posts from the feed XML function
-        async function getFeedItems(url) {
+          //For every blog found get the values and create a blog item
+          items.forEach((item) => {
+            itemPromises.push(
+              new Promise((resolve, reject) => {
+                //Remove the prefix of the node values
+                let title = item.querySelector("title").innerHTML;
+                let titlePrefix = "<![CDATA[";
 
-            //Get the results of the feed XML url
-            let res = await fetch(url)
-            res = await res.text()
-            let doc = (new DOMParser()).parseFromString(res, "text/xml")
-            return new Promise((resolve, reject) => {
+                title = title.substr(titlePrefix.length, title.length - 3 - titlePrefix.length);
+                let link = item.querySelector("link").innerHTML;
+                let img = item.getElementsByTagName("media:thumbnail")[0];
+                if (img) img = img.attributes[0].nodeValue;
 
+                new Promise((resolve, reject) => {
+                  let res = fetch(link)
+                    .then((res) => (res = res.text()))
+                    .then((res) => {
+                      let doc = new DOMParser().parseFromString(res, "text/html");
 
-                //Search through the XML for the item nodes
-                let channels = doc.querySelector("channel")
-                let items = channels.querySelectorAll("item")
-                let posts = []
+                      //See if the description can be found
+                      let content = doc.querySelector(".post-content");
+                      let header = content.querySelector("h2").textContent;
 
-                let itemPromises = []
+                      let pTag = 0;
+                      let body = content.querySelectorAll("p")[pTag].textContent;
+                      while (body.length < 5 || content.querySelectorAll("p").length < pTag) body = content.querySelectorAll("p")[++pTag].textContent;
 
-                //For every blog found get the values and create a blog item
-                items.forEach(item => {
-                    itemPromises.push(new Promise((resolve, reject) => {
+                      let post = {};
+                      post.title = title;
+                      post.link = link;
+                      post.img = img;
+                      post.header = "<h2>" + header + "</h2>";
+                      post.body = "<p>" + body + "</p>";
 
-                        //Remove the prefix of the node values
-                        let title = item.querySelector("title").innerHTML
-                        let titlePrefix = '<![CDATA['
-
-                        title = title.substr(titlePrefix.length, title.length - 3 - titlePrefix.length)
-                        let link = item.querySelector("link").innerHTML
-                        let img = item.getElementsByTagName("media:thumbnail")[0]
-                        if (img)
-                            img = img.attributes[0].nodeValue
-
-                        new Promise((resolve, reject) => {
-                            let res = fetch(link).then(res => res = res.text()).then(res => {
-
-                                let doc = new DOMParser().parseFromString(res, "text/html");
-
-                                //See if the description can be found
-                                let content = doc.querySelector(".post-content");
-                                let header = content.querySelector("h2").textContent
-                                
-                                let pTag = 0
-                                let body = content.querySelectorAll("p")[pTag].textContent
-                                while(body.length < 5 || content.querySelectorAll("p").length < pTag)
-                                    body = content.querySelectorAll("p")[++pTag].textContent
-                                
-
-                                let post = {}
-                                post.title = title
-                                post.link = link
-                                post.img = img
-                                post.header = '<h2>'+header+'</h2>'
-                                post.body = '<p>'+body+'</p>'
-
-                                resolve(post)
-
-                            })
-                        }).then((post) =>
-                            resolve(post))
-
-
-                    }))
-                })
-                Promise.all(itemPromises).then(posts => resolve(posts))
-            })
-        }
-
+                      resolve(post);
+                    });
+                }).then((post) => resolve(post));
+              })
+            );
+          });
+          Promise.all(itemPromises).then((posts) => resolve(posts));
+        });
+      }
     </script>
+  </head>
 
-</head>
-
-<body style="margin: 3rem auto; max-width: 800px;">
+  <body style="margin: 3rem auto; max-width: 800px">
     <div id="loading-overlay" style="display: none">
-        <i class="fas fa-spinner fa-pulse fa-10x" style="color: #aaa"></i>
+      <i class="fas fa-spinner fa-pulse fa-10x" style="color: #aaa"></i>
     </div>
 
-    <div style="flex-grow:1">
-        <div class="form-item border">
-            <input type="text" id="solutionsURL-english" value="https://mysolutionsonline.ca/fall-2022" required>
-            <label for="solutionsURL-english">Latest(English) Solutions Edition URL</label>
-        </div>
-        <div class="form-item border">
-            <input required type="text" id="solutionsURL-french" value="https://mysolutionsonline.ca/automne-2022">
-            <label for="solutionsURL-french">Latest(French) Solutions Edition URL</label>
-        </div>
+    <div style="flex-grow: 1">
+      <div class="form-item border">
+        <input type="text" id="solutionsURL-english" value="" required />
+        <label for="solutionsURL-english">Latest(English) Solutions Edition URL</label>
+      </div>
+      <div class="form-item border">
+        <input required type="text" id="solutionsURL-french" value="" />
+        <label for="solutionsURL-french">Latest(French) Solutions Edition URL</label>
+      </div>
     </div>
 
     <div class="form-item">
-        <input id="generateSnippets" type="button" value="Generate Solutions Snippets">
+      <input id="generateSnippets" type="button" value="Generate Solutions Snippets" />
     </div>
+    <p>Don't forget the videos! This tool doesn't pull them, but they still need to be added.</p>
+    <hr class="line-70" />
     <div id="articles"></div>
+  </body>
 
-</body>
-
-<style>
+  <style>
     /* Form Styles */
 
     .form-item {
-        position: relative;
-        margin-bottom: 15px;
+      position: relative;
+      margin-bottom: 15px;
     }
 
     .form-item label {
-        position: absolute;
-        top: 0px;
-        left: 0px;
-        font-size: 14px;
-        transition: all 0.5s ease-in-out;
-        cursor: text;
-        color: #aaa;
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      font-size: 14px;
+      transition: all 0.5s ease-in-out;
+      cursor: text;
+      color: #aaa;
     }
 
     .card.dark input[type="text"] {
-        color: #fff;
+      color: #fff;
     }
 
     .form-item.border:not(.split) {
-        border-bottom: 1px solid #d2d2d2;
+      border-bottom: 1px solid #d2d2d2;
     }
 
-    .form-item.split.border>div,
-    .form-item.split>div.border {
-        border-bottom: 1px solid #d2d2d2;
-        display: flex;
-        vertical-align: bottom;
+    .form-item.split.border > div,
+    .form-item.split > div.border {
+      border-bottom: 1px solid #d2d2d2;
+      display: flex;
+      vertical-align: bottom;
     }
 
     .form-item.split {
-        display: flex;
-        flex-flow: row nowrap;
-        position: relative;
+      display: flex;
+      flex-flow: row nowrap;
+      position: relative;
     }
 
-    @media(max-width: 820px) {
-        .form-item.split {
-            flex-flow: row wrap;
-        }
+    @media (max-width: 820px) {
+      .form-item.split {
+        flex-flow: row wrap;
+      }
 
-        .form-item>*:not(:last-of-type) {
-            margin-bottom: 15px;
-        }
+      .form-item > *:not(:last-of-type) {
+        margin-bottom: 15px;
+      }
     }
 
-    @media(max-width: 540px) {
-        .form-item.split>div {
-            flex-basis: 100%;
-        }
+    @media (max-width: 540px) {
+      .form-item.split > div {
+        flex-basis: 100%;
+      }
     }
 
-    .form-item.split>*:first-child {
-        flex-grow: 1;
-        position: relative;
+    .form-item.split > *:first-child {
+      flex-grow: 1;
+      position: relative;
     }
 
-    .form-item.split.even>* {
-        flex-grow: 1;
-        flex-basis: 50%;
-        position: relative;
+    .form-item.split.even > * {
+      flex-grow: 1;
+      flex-basis: 50%;
+      position: relative;
     }
 
-    @media(min-width: 820px) {
-        .form-item.split.even>*:not(:first-of-type) {
-            margin-left: 5px;
-        }
+    @media (min-width: 820px) {
+      .form-item.split.even > *:not(:first-of-type) {
+        margin-left: 5px;
+      }
 
-        .form-item.split.even>*:first-of-type {
-            margin-right: 5px;
-        }
+      .form-item.split.even > *:first-of-type {
+        margin-right: 5px;
+      }
     }
 
     .form-item input[type="text"],
@@ -323,19 +321,19 @@
     .form-item input[type="color"],
     .form-item textarea,
     .form-item .editable {
-        min-width: 150px;
+      min-width: 150px;
     }
 
-    .form-item input[type="text"]:focus~label,
-    .form-item input[type="text"]:valid~label,
-    .form-item input[type="search"]:focus~label,
-    .form-item input[type="search"]:valid~label,
-    .form-item textarea:focus~label,
-    .form-item textarea:valid~label,
-    .form-item .editable:focus~label,
-    .form-item .editable:not(:empty)~label {
-        top: -12px;
-        font-size: 12px;
+    .form-item input[type="text"]:focus ~ label,
+    .form-item input[type="text"]:valid ~ label,
+    .form-item input[type="search"]:focus ~ label,
+    .form-item input[type="search"]:valid ~ label,
+    .form-item textarea:focus ~ label,
+    .form-item textarea:valid ~ label,
+    .form-item .editable:focus ~ label,
+    .form-item .editable:not(:empty) ~ label {
+      top: -12px;
+      font-size: 12px;
     }
 
     .form-item input[type="text"]:focus,
@@ -343,8 +341,8 @@
     .form-item input[type="number"]:focus,
     .form-item textarea:focus,
     .form-item .editable:focus {
-        border: none;
-        outline: none;
+      border: none;
+      outline: none;
     }
 
     .form-item input[type="text"],
@@ -353,43 +351,42 @@
     .form-item textarea,
     .form-item .editable,
     .form-item select {
-        border: 0;
-        outline: none;
-        background: transparent;
-        width: 100%;
-        padding: 2px 0 5px 0;
-        resize: vertical;
-        font-size: 13px;
+      border: 0;
+      outline: none;
+      background: transparent;
+      width: 100%;
+      padding: 2px 0 5px 0;
+      resize: vertical;
+      font-size: 13px;
     }
 
     .form-item input.hideBorder {
-        border: none !important;
+      border: none !important;
     }
 
     /* Button Style */
 
     .form-item input[type="button"],
     .form-item button {
-        color: #fff;
-        background-color: #00a72a;
-        outline: none;
-        border: 0;
-        color: #fff;
-        padding: 10px 20px;
-        text-transform: uppercase;
-        margin: 0 10px;
-        border-radius: 2px;
-        cursor: pointer;
-        position: relative;
-        transition: background-color .35s;
+      color: #fff;
+      background-color: #00a72a;
+      outline: none;
+      border: 0;
+      color: #fff;
+      padding: 10px 20px;
+      text-transform: uppercase;
+      margin: 0 10px;
+      border-radius: 2px;
+      cursor: pointer;
+      position: relative;
+      transition: background-color 0.35s;
     }
 
     .form-item input[type="button"]:focus,
     .form-item input[type="button"]:hover,
     .form-item button:focus,
     .form-item button:hover {
-        background-color: #04711f;
+      background-color: #04711f;
     }
-</style>
-
+  </style>
 </html>
