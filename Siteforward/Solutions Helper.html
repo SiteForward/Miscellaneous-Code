@@ -11,77 +11,79 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" />
 
     <script type="module">
-      let season = [];
-      let year = "2022";
-      let articleWrapper = document.querySelector("#articles");
-      let articlesToHide = 0;
+      let season = ["winter", "spring", "fall"]
+      let seasonName = ""
+      let now = new Date()
+      let year = now.getFullYear()
+      let month = now.getMonth()
+
+      if (month >= 10) season = season[0]
+      else if (month >= 9) season = season[2]
+      else if (month >= 4) season = season[1]
+      else{
+        season = season[0]
+        year = year - 1
+      }
+
+      let path = "/content/solutions-magazine/en_CA/issues/" + season + "-" + year + ".html"
+      seasonName = season[0].toUpperCase() + season.substring(1, season.length)
+
+      let articlesToHide = 0
 
       if (!window.supress)
         window.addEventListener("load", (event) => {
           document.querySelector("#generateSnippets").addEventListener("click", () => {
-            let solutionsURLEnglish = document.querySelector("#solutionsURL-english").value + "/feed.xml";
-            let solutionsURLFrench = document.querySelector("#solutionsURL-french").value + "/feed.xml";
+            let solutionsURLEnglish = document.querySelector("#solutionsURL-english").value
+            let solutionsURLFrench = document.querySelector("#solutionsURL-french").value
 
-            let seasonEnglish = solutionsURLEnglish.substring(solutionsURLEnglish.indexOf(".ca/") + 4, solutionsURLEnglish.indexOf("-"));
-            seasonEnglish = seasonEnglish[0].toUpperCase() + seasonEnglish.substring(1, seasonEnglish.length);
-
-            let seasonFrench = solutionsURLFrench.substring(solutionsURLFrench.indexOf(".ca/") + 4, solutionsURLFrench.indexOf("-"));
-            seasonFrench = seasonFrench[0].toUpperCase() + seasonFrench.substring(1, seasonFrench.length);
-
-            season = [seasonEnglish, seasonFrench];
-            year = solutionsURLEnglish.substr(solutionsURLEnglish.indexOf("-") + 1, 4);
-            document.querySelector("#loading-overlay").style = "position: absolute;top: 50%; left: 50%; transform: translate(-50%, -50%);";
+            document.querySelector("#loading-overlay").style = "position: absolute;top: 50%; left: 50%; transform: translate(-50%, -50%);"
 
             getFeedItems(solutionsURLEnglish).then((articles) => {
               articles.forEach((article) => {
-                let section = createSection(article, true);
-                articleWrapper.appendChild(section);
-              });
+                let section = createSection(article, true)
+                articleWrapper.appendChild(section)
+              })
               getFeedItems(solutionsURLFrench).then((articles) => {
-                let englishArticles = document.querySelectorAll("#articles > div");
+                let englishArticles = document.querySelectorAll("#articles > div")
                 for (let i = 0; i < articles.length; i++) {
-                  let article = articles[i];
-                  let section = createSection(article, false);
-                  articleWrapper.insertBefore(section, englishArticles[i]);
+                  let article = articles[i]
+                  let section = createSection(article, false)
+                  articleWrapper.insertBefore(section, englishArticles[i])
                   if (i == articles.length - 1) {
-                    document.querySelector("#loading-overlay").style = "display: none;";
-                    articleWrapper.childNodes.forEach((div) => articleWrapper.insertBefore(div, articleWrapper.firstChild));
+                    document.querySelector("#loading-overlay").style = "display: none;"
+                    articleWrapper.childNodes.forEach((div) => articleWrapper.insertBefore(div, articleWrapper.firstChild))
                     for (let i = 0; i < articlesToHide; i++) {
-                      let checkbox = articleWrapper.querySelectorAll("input[type='checkbox']")[i];
-                      checkbox.parentNode.parentNode.parentNode.parentNode.style["max-height"] = "0px";
-                      checkbox.checked = true;
+                      let checkbox = articleWrapper.querySelectorAll("input[type='checkbox']")[i]
+                      checkbox.parentNode.parentNode.parentNode.parentNode.style["max-height"] = "0px"
+                      checkbox.checked = true
                     }
                   }
                 }
-              });
-            });
-          });
+              })
+            })
+          })
 
-          let params = new URL(window.location.href).searchParams;
+          let params = new URL(window.location.href).searchParams
           if (Array.from(params).length) {
-            if (params.get("english")) document.querySelector("#solutionsURL-english").value = decodeURI(params.get("english"));
-            if (params.get("french")) document.querySelector("#solutionsURL-french").value = decodeURI(params.get("french"));
-            if (params.get("completed")) articlesToHide = params.get("completed");
-            document.querySelector("#generateSnippets").click();
+            if (params.get("english")) document.querySelector("#solutionsURL-english").value = decodeURI(params.get("english"))
+            if (params.get("french")) document.querySelector("#solutionsURL-french").value = decodeURI(params.get("french"))
+            if (params.get("completed")) articlesToHide = params.get("completed")
+            document.querySelector("#generateSnippets").click()
           } else {
-            fetch("https://mysolutionsonline.ca/current-issue").then((res) => {
-              document.querySelector("#solutionsURL-english").value = res.url;
-            });
-            fetch("https://mysolutionsonline.ca/ledition-actuelle").then((res) => {
-              document.querySelector("#solutionsURL-french").value = res.url;
-            });
+              document.querySelector("#solutionsURL-english").value = "https://mysolutionsonline.manulife.ca"+path
+              document.querySelector("#solutionsURL-french").value = "https://mysolutionsonline.manuvie.ca/"+path
           }
-        });
+        })
 
       function createSection(article, isEnglish) {
-        let index = isEnglish ? 0 : 1;
-        let div = document.createElement("div");
+        let index = isEnglish ? 0 : 1
+        let div = document.createElement("div")
         let tags = [
           ["English", "Solutions"],
           ["Français", "Solutions (  Français )"],
-        ];
-        let title = ["Solutions For Financial Planning*", "Solutions pour planifier vos finances*"];
-        let articleBody = article.body;
+        ]
+        let title = ["Solutions For Financial Planning*", "Solutions pour planifier vos finances*"]
+        let articleBody = article.body
         // .replace(/&/g, "&amp;")
         // .replace(/</g, "&lt;")
         // .replace(/>/g, "&gt;")
@@ -91,12 +93,12 @@
           `<h3><a class="btn" href="${article.link}" rel="noopener noreferrer" target="_blank">Read the full article*</a></h3>
                     <p><br></p><p><br></p><hr>
                     <p class="disclaimer">* This article opens in a new window directing you to Manulife's Solutions for Financial Planning Magazine.</p>
-                    <p class="disclaimer">© 2022 Manulife. The persons and situations depicted are fictional and their resemblance to anyone living or dead is purely coincidental. This media is for information purposes only and is not intended to provide specific financial, tax, legal, accounting or other advice and should not be relied upon in that regard. Many of the issues discussed will vary by province. Individuals should seek the advice of professionals to ensure that any action taken with respect to this information is appropriate to their specific situation. E &amp; O E. Commissions, trailing commissions, management fees and expenses all may be associated with mutual fund investments. Please read the prospectus before investing. Mutual funds are not guaranteed, their values change frequently and past performance may not be repeated. Any amount that is allocated to a segregated fund is invested at the risk of the contract holder and may increase or decrease in value.</p>`,
+                    <p class="disclaimer">© ${year} Manulife. The persons and situations depicted are fictional and their resemblance to anyone living or dead is purely coincidental. This media is for information purposes only and is not intended to provide specific financial, tax, legal, accounting or other advice and should not be relied upon in that regard. Many of the issues discussed will vary by province. Individuals should seek the advice of professionals to ensure that any action taken with respect to this information is appropriate to their specific situation. E &amp; O E. Commissions, trailing commissions, management fees and expenses all may be associated with mutual fund investments. Please read the prospectus before investing. Mutual funds are not guaranteed, their values change frequently and past performance may not be repeated. Any amount that is allocated to a segregated fund is invested at the risk of the contract holder and may increase or decrease in value.</p>`,
           `<h3><a class="btn" href="${article.link}" rel="noopener noreferrer" target="_blank">Lire l'article au complet*</a></h3>
                     <p><br></p><p><br></p><hr>
                     <p class="disclaimer">*Cet article s'ouvre dans une nouvelle fenêtre qui vous dirigera vers le revue Solutions de planification financière de Manuvie.</p>
-                    <p class="disclaimer">© 2022 Manuvie. Les personnes et les situations évoquées sont fictives et toute ressemblance avec des personnes vivantes ou décédées serait pure coïncidence. Le présent document est proposé à titre indicatif seulement. Il n’a pas pour objet de donner des conseils particuliers d’ordre financier, fiscal, juridique, comptable ou autre et les renseignements qu’il fournit ne doivent pas être considérés comme tels. Nombre des points analysés varient selon la province. Tout particulier ayant pris connaissance des renseignements formulés ici devrait s’assurer qu’ils sont appropriés à sa situation en demandant l’avis d’un spécialiste. Sauf erreurs ou omissions. La souscription de fonds communs de placement peut donner lieu au versement de commissions ou de commissions de suivi ainsi qu’au paiement de frais de gestion ou d’autres frais. Veuillez lire le prospectus des fonds avant d’effectuer un placement. Les fonds communs de placement ne sont pas garantis, leur valeur liquidative varie fréquemment et les rendements passés peuvent ne pas se reproduire. Toute somme affectée à un fonds distinct est placée aux risques du titulaire du contrat et peut prendre ou perdre de la valeur.</p>`,
-        ];
+                    <p class="disclaimer">© ${year} Manuvie. Les personnes et les situations évoquées sont fictives et toute ressemblance avec des personnes vivantes ou décédées serait pure coïncidence. Le présent document est proposé à titre indicatif seulement. Il n’a pas pour objet de donner des conseils particuliers d’ordre financier, fiscal, juridique, comptable ou autre et les renseignements qu’il fournit ne doivent pas être considérés comme tels. Nombre des points analysés varient selon la province. Tout particulier ayant pris connaissance des renseignements formulés ici devrait s’assurer qu’ils sont appropriés à sa situation en demandant l’avis d’un spécialiste. Sauf erreurs ou omissions. La souscription de fonds communs de placement peut donner lieu au versement de commissions ou de commissions de suivi ainsi qu’au paiement de frais de gestion ou d’autres frais. Veuillez lire le prospectus des fonds avant d’effectuer un placement. Les fonds communs de placement ne sont pas garantis, leur valeur liquidative varie fréquemment et les rendements passés peuvent ne pas se reproduire. Toute somme affectée à un fonds distinct est placée aux risques du titulaire du contrat et peut prendre ou perdre de la valeur.</p>`,
+        ]
         div.innerHTML = `
                 <div class="row article" style="border-bottom: 2px solid #dadada;padding-bottom: 1rem; margin-bottom: 1rem;">
                     <div class="col-xs-12 col-sm-4">
@@ -129,88 +131,80 @@
                           .replace("</h2>", "")} Solutions For Financial Planning, ${season[index]} ${year}*">
                     </div>
                 </div>
-            `;
-        div.style = "overflow: hidden; max-height: 500px; transition: .3s all";
+            `
+        div.style = "overflow: hidden; max-height: 500px; transition: .3s all"
 
         div.addEventListener("click", function (el) {
-          if (el.target.select) el.target.select();
-        });
+          if (el.target.select) el.target.select()
+        })
         div.querySelector("input[type='checkbox']").addEventListener("change", () => {
-          div.style["max-height"] = "0px";
-          let params = new URL(window.location.href).searchParams;
-          params.set("english", encodeURI(document.querySelector("#solutionsURL-english").value));
-          params.set("french", encodeURI(document.querySelector("#solutionsURL-french").value));
-          params.set("completed", ++articlesToHide);
-          var newRelativePathQuery = window.location.pathname + "?" + params.toString();
-          history.pushState(null, "", newRelativePathQuery);
-        });
+          div.style["max-height"] = "0px"
+          let params = new URL(window.location.href).searchParams
+          params.set("english", encodeURI(document.querySelector("#solutionsURL-english").value))
+          params.set("french", encodeURI(document.querySelector("#solutionsURL-french").value))
+          params.set("completed", ++articlesToHide)
+          var newRelativePathQuery = window.location.pathname + "?" + params.toString()
+          history.pushState(null, "", newRelativePathQuery)
+        })
 
-        return div;
+        return div
       }
 
       function shortenLine(string, length) {
-        if (string.length <= length) return string;
-        let spaceIndex = length;
-        while (spaceIndex < string.length && string[spaceIndex] != " ") spaceIndex++;
-        return string.substring(0, spaceIndex) + "...";
+        if (string.length <= length) return string
+        let spaceIndex = length
+        while (spaceIndex < string.length && string[spaceIndex] != " ") spaceIndex++
+        return string.substring(0, spaceIndex) + "..."
       }
 
       //Read all the blog posts from the feed XML function
       async function getFeedItems(url) {
-        //Get the results of the feed XML url
-        let res = await fetch(url);
-        res = await res.text();
-        let doc = new DOMParser().parseFromString(res, "text/xml");
-        return new Promise((resolve, reject) => {
-          //Search through the XML for the item nodes
-          let channels = doc.querySelector("channel");
-          let items = channels.querySelectorAll("item");
-          let posts = [];
+        let issueRes = await fetch("https://api.allorigins.win/raw?url="+url)
+        console.log("https://api.allorigins.win/raw?url="+url)
+        issueRes = await issueRes.text()
+        console.log(1)
+        return new Promise((resolveIssue, rejectIssue) => {
+          let issueDoc = new DOMParser().parseFromString(issueRes, "text/html")
+          console.log(issueDoc)
+          let promises = []
+          let posts = []
+          let articles = [...issueDoc.querySelectorAll(".content")]
+          console.log("Length: "+articles.length)
+        console.log(2)
+          articles.forEach((article) => {
+            promises.push(
+              new Promise((resolveArticle, rejectArticle) => {
+                
+        console.log(3)
+                let articleLink = article.querySelector("a").href
+                let articleRes = fetch("https://api.allorigins.win/raw?url="+url)
+                  .then((articleRes) => (articleRes = articleRes.text()))
+                  .then((articleRes) => {
+                    
+        console.log(4)
+                    let articleDoc = new DOMParser().parseFromString(articleRes, "text/html")
+                    //See if the description can be found
+                    let content = articleDoc.querySelector(".cmp-container")
+                    let header = content.querySelector(".post-title").textContent
 
-          let itemPromises = [];
+                    let pTag = 0
+                    let body = content.querySelectorAll("p")[pTag].textContent
+                    while (body.length < 5 || content.querySelectorAll("p").length < pTag) body = content.querySelectorAll("p")[++pTag].textContent
 
-          //For every blog found get the values and create a blog item
-          items.forEach((item) => {
-            itemPromises.push(
-              new Promise((resolve, reject) => {
-                //Remove the prefix of the node values
-                let title = item.querySelector("title").innerHTML;
-                let titlePrefix = "<![CDATA[";
+                    let post = {}
+                    post.title = title
+                    post.link = link
+                    post.img = img
+                    post.header = "<h2>" + header + "</h2>"
+                    post.body = "<p>" + body + "</p>"
 
-                title = title.substr(titlePrefix.length, title.length - 3 - titlePrefix.length);
-                let link = item.querySelector("link").innerHTML;
-                let img = item.getElementsByTagName("media:thumbnail")[0];
-                if (img) img = img.attributes[0].nodeValue;
-
-                new Promise((resolve, reject) => {
-                  let res = fetch(link)
-                    .then((res) => (res = res.text()))
-                    .then((res) => {
-                      let doc = new DOMParser().parseFromString(res, "text/html");
-
-                      //See if the description can be found
-                      let content = doc.querySelector(".post-content");
-                      let header = content.querySelector("h2").textContent;
-
-                      let pTag = 0;
-                      let body = content.querySelectorAll("p")[pTag].textContent;
-                      while (body.length < 5 || content.querySelectorAll("p").length < pTag) body = content.querySelectorAll("p")[++pTag].textContent;
-
-                      let post = {};
-                      post.title = title;
-                      post.link = link;
-                      post.img = img;
-                      post.header = "<h2>" + header + "</h2>";
-                      post.body = "<p>" + body + "</p>";
-
-                      resolve(post);
-                    });
-                }).then((post) => resolve(post));
+                    resolveArticle(post)
+                  }).catch(()=>rejectArticle())
               })
-            );
-          });
-          Promise.all(itemPromises).then((posts) => resolve(posts));
-        });
+            )
+            Promise.all(promises).then(posts => resolveIssue(posts))
+          })
+        })
       }
     </script>
   </head>
