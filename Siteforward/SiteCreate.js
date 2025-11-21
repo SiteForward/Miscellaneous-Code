@@ -4,60 +4,18 @@ const CONFIG = {
         SITE_ID: "642338e703a127cc457d7b6b",
         LAYOUT: {
             ENGLISH: [
-                {
-                    type: "home_alt",
-                    name: "Home",
-                    id: '6423394f03a127cc457d7c4f'
-                },
-                {
-                    type: "redirect",
-                    name: "Meet the Team",
-                    url: "#team"
-                },
-                {
-                    type: "redirect",
-                    name: "Services & Solutions",
-                    url: "#services"
-                },
-                {
-                    type: "redirect",
-                    name: "Contact",
-                    url: "#contact"
-                },
-                {
-                    type: "redirect",
-                    name: "Client Login",
-                    style: "button",
-                    url: "https://manulifewealth.ca/clients/en/sign-in"
-                }
+                { type: "home_alt", name: "Home", id: '6423394f03a127cc457d7c4f' },
+                { type: "redirect", name: "Meet the Team", url: "#team" },
+                { type: "redirect", name: "Services & Solutions", url: "#services" },
+                { type: "redirect", name: "Contact", url: "#contact" },
+                { type: "redirect", name: "Client Login", style: "button", url: "https://manulifewealth.ca/clients/en/sign-in" }
             ],
             FRENCH: [
-                {
-                    type: "home_alt",
-                    name: "Accueil",
-                    id: '64f0c97c6ffaf8c435fd70c2'
-                },
-                {
-                    type: "redirect",
-                    name: "Notre équipe",
-                    url: "#team"
-                },
-                {
-                    type: "redirect",
-                    name: "Services et solutions",
-                    url: "#services"
-                },
-                {
-                    type: "redirect",
-                    name: "Contact",
-                    url: "#contact"
-                },
-                {
-                    type: "redirect",
-                    name: "Session client",
-                    style: "button",
-                    url: "https://manulifewealth.ca/clients/fr/sign-in"
-                }
+                { type: "home_alt", name: "Accueil", id: '64f0c97c6ffaf8c435fd70c2' },
+                { type: "redirect", name: "Notre équipe", url: "#team" },
+                { type: "redirect", name: "Services et solutions", url: "#services" },
+                { type: "redirect", name: "Contact", url: "#contact" },
+                { type: "redirect", name: "Session client", style: "button", url: "https://manulifewealth.ca/clients/fr/sign-in" }
             ]
         }
     },
@@ -65,150 +23,72 @@ const CONFIG = {
         SITE_ID: '5b71917a1cbe736dff66dc27',
         LAYOUT: {
             ENGLISH: [
+                { type: "home_alt", name: "Home", id: "5b719261138837295d1d7edf" },
                 {
-                    type: "home_alt",
-                    name: "Home",
-                    id: "5b719261138837295d1d7edf"
-                },
-                {
-                    type: "standard",
-                    name: "About Us",
-                    id: "68b8492688f8e60cc8788e8d",
+                    type: "standard", name: "About Us", id: "68b8492688f8e60cc8788e8d",
                     children: [
-                        {
-                            type: "members",
-                            name: "Your Team",
-                            id: "68b8492688f8e60cc8788e8e"
-                        },
-                        {
-                            type: "standard",
-                            name: "Our Process",
-                            id: "68b8492688f8e60cc8788e8f"
-                        },
-                        {
-                            type: "standard",
-                            name: "Testimonials",
-                            id: "68b8492688f8e60cc8788e90"
-                        },
-                        {
-                            type: "standard",
-                            name: "Referrals",
-                            id: "68b8492788f8e60cc8788e92"
-                        }
+                        { type: "members", name: "Your Team", id: "68b8492688f8e60cc8788e8e" },
+                        { type: "standard", name: "Our Process", id: "68b8492688f8e60cc8788e8f" },
+                        { type: "standard", name: "Testimonials", id: "68b8492688f8e60cc8788e90" },
+                        { type: "standard", name: "Referrals", id: "68b8492788f8e60cc8788e92" }
                     ]
                 },
+                { type: "standard", name: "Services & Solutions", id: "68b8492788f8e60cc8788e93" },
+                { type: "blog", name: "Insights & Articles", id: "68b84cec08b3f0b889c91b37", external_feed: "https://SiteForward.ca/rss-feed/feed.xml" },
                 {
-                    type: "standard",
-                    name: "Services & Solutions",
-                    id: "68b8492788f8e60cc8788e93"
-                },
-                {
-                    type: "blog",
-                    name: "Insights & Articles",
-                    id: "68b84cec08b3f0b889c91b37",
-                    external_feed: "https://SiteForward.ca/rss-feed/feed.xml"
-                },
-                {
-                    type: "standard",
-                    name: "Client Resources",
-                    id: "68b8492788f8e60cc8788e95",
+                    type: "standard", name: "Client Resources", id: "68b8492788f8e60cc8788e95",
                     children: [
-                        {
-                            type: "standard",
-                            name: "Client Centre",
-                            id: "68b8492788f8e60cc8788e97"
-                        },
-                        {
-                            type: "standard",
-                            name: "Knowledge Centre",
-                            id: "68b8492888f8e60cc8788e98"
-                        }
+                        { type: "standard", name: "Client Centre", id: "68b8492788f8e60cc8788e97" },
+                        { type: "standard", name: "Knowledge Centre", id: "68b8492888f8e60cc8788e98" }
                     ]
                 },
-                {
-                    type: "standard",
-                    name: "Contact",
-                    id: "68b8492888f8e60cc8788e99"
-                },
-                {
-                    type: "redirect",
-                    name: "Client Login",
-                    style: "button",
-                    url: "https://manulifewealth.ca/clients/en/sign-in"
-                }
+                { type: "standard", name: "Contact", id: "68b8492888f8e60cc8788e99" },
+                { type: "redirect", name: "Client Login", style: "button", url: "https://manulifewealth.ca/clients/en/sign-in" }
             ],
             FRENCH: [
+                { type: "home_alt", name: "Accueil", id: "68b8492988f8e60cc8788ea5" },
                 {
-                    type: "home_alt",
-                    name: "Accueil",
-                    id: "68b8492988f8e60cc8788ea5"
-                },
-                {
-                    type: "standard",
-                    name: "À Propos",
-                    id: "68b8492988f8e60cc8788ea6",
+                    type: "standard", name: "À Propos", id: "68b8492988f8e60cc8788ea6",
                     children: [
-                        {
-                            type: "members",
-                            name: "Notre équipe",
-                            id: "68b8492988f8e60cc8788ea7"
-                        },
-                        {
-                            type: "standard",
-                            name: "Nous Processus",
-                            id: "68b8492a88f8e60cc8788ea9"
-                        },
-                        {
-                            type: "standard",
-                            name: "Témoignages",
-                            id: "68b8492a88f8e60cc8788eab"
-                        },
-                        {
-                            type: "standard",
-                            name: "Recommandations",
-                            id: "68b8492a88f8e60cc8788eac"
-                        }
+                        { type: "members", name: "Notre équipe", id: "68b8492988f8e60cc8788ea7" },
+                        { type: "standard", name: "Nous Processus", id: "68b8492a88f8e60cc8788ea9" },
+                        { type: "standard", name: "Témoignages", id: "68b8492a88f8e60cc8788eab" },
+                        { type: "standard", name: "Recommandations", id: "68b8492a88f8e60cc8788eac" }
                     ]
                 },
+                { type: "standard", name: "Services", id: "68b8492a88f8e60cc8788ead" },
+                { type: "blog", name: "Articles", id: "68b8566aaec1059ba9e98b15", external_feed: "https://SiteForward.ca/rss-french-feed/feed.xml" },
                 {
-                    type: "standard",
-                    name: "Services",
-                    id: "68b8492a88f8e60cc8788ead"
-                },
-                {
-                    type: "blog",
-                    name: "Articles",
-                    id: "68b8566aaec1059ba9e98b15",
-                    external_feed: "https://SiteForward.ca/rss-french-feed/feed.xml",
-                },
-                {
-                    type: "standard",
-                    name: "Ressources",
-                    id: "68b8492b88f8e60cc8788eaf",
+                    type: "standard", name: "Ressources", id: "68b8492b88f8e60cc8788eaf",
                     children: [
-                        {
-                            type: "standard",
-                            name: "Centre client",
-                            id: "68b8492b88f8e60cc8788eb0"
-                        },
-                        {
-                            type: "standard",
-                            name: "Centre d'information",
-                            id: "68b8492b88f8e60cc8788eb1"
-                        }
+                        { type: "standard", name: "Centre client", id: "68b8492b88f8e60cc8788eb0" },
+                        { type: "standard", name: "Centre d'information", id: "68b8492b88f8e60cc8788eb1" }
                     ]
                 },
-                {
-                    type: "standard",
-                    name: "Contact",
-                    id: "68b8492b88f8e60cc8788eb3"
-                },
-                {
-                    type: "redirect",
-                    name: "Accès du client",
-                    style: "button",
-                    url: "https://manulifewealth.ca/clients/fr/sign-in"
-                }
+                { type: "standard", name: "Contact", id: "68b8492b88f8e60cc8788eb3" },
+                { type: "redirect", name: "Accès du client", style: "button", url: "https://manulifewealth.ca/clients/fr/sign-in" }
+            ]
+        }
+    },
+    ONBOARDING: {
+        SITE_ID: '69137fa3503e5dbdab03b1e5',
+        LAYOUT: {
+            ENGLISH: [
+                { type: "home", name: "Home", id: '69137fc0503e5dbdab03b200' },
+                { type: "members", name: "Your Team", id: '69137fef53b64096afc80cc8' },
+                { type: "blog", name: "Insights & Articles", id: '69137ff153b64096afc80cce' },
+                { type: "standard", name: "Client Centre", id: '69137ff253b64096afc80cd2' },
+                { type: "standard", name: "Contact", id: '69137ff353b64096afc80cd4' },
+                { type: "redirect", name: "Client Login", id: '69137ff353b64096afc80cd5', url: "https://manulifewealth.ca/clients/en/sign-in" },
+            ],
+            FRENCH: [
+                { type: "home_alt", name: "Accueil", id: '69137ff653b64096afc80ce0' },
+                { type: "members", name: "Notre équipe", id: '69137ff753b64096afc80ce3' },
+                { type: "blog", name: "Articles", id: '69137ff853b64096afc80cea' },
+                { type: "standard", name: "Centre client", id: '69137ff953b64096afc80ced' },
+                { type: "standard", name: "Contact", id: '69137ffa53b64096afc80cf0' },    
+                { type: "redirect", name: "Accès du client", style: "button", url: "https://manulifewealth.ca/clients/fr/sign-in" }
+            
             ]
         }
     },
@@ -299,13 +179,13 @@ async function getSiteData(site_id) {
 
 /**
  * Setup the site with the given configuration
- * @param {boolean} is_single_page - Whether the site is a single page application
+ * @param {string} template - The template type ('SINGLE_PAGE', 'MULTI_PAGE', 'ONBOARDING')
  * @param {string} default_language - The default language for the site
  * @param {boolean} is_bilingual - Whether the site is bilingual
  * @param {boolean} remove_other_pages - Whether to remove existing pages before creating new ones
  * @param {boolean} refresh_after - Whether to refresh the page after completion
  */
-async function setupItems(is_single_page, default_language, is_bilingual, add_pages = true,remove_other_pages = true, refresh_after = true) {
+async function setupItems(template, default_language, is_bilingual, add_pages = true,remove_other_pages = true, refresh_after = true) {
     let item_structure = {main: [], other: []}
     let usedSlugs = new Set() // Track slugs to detect conflicts
     usedSlugs.add("home") // Home is always present
@@ -335,12 +215,14 @@ async function setupItems(is_single_page, default_language, is_bilingual, add_pa
                 - Create items based off the layout; use hero_content, content, background of each item from the page data grabbed through the use of the id; children are needed here;
         */
         
-        // Get the appropriate layout based on site type
-        const layout = is_single_page 
-            ? (default_language === 'en' ? CONFIG.SINGLE_PAGE.LAYOUT.ENGLISH : CONFIG.SINGLE_PAGE.LAYOUT.FRENCH)
-            : (default_language === 'en' ? CONFIG.MULTI_PAGE.LAYOUT.ENGLISH : CONFIG.MULTI_PAGE.LAYOUT.FRENCH)
+        // Get the appropriate layout based on template type
+        const templateConfig = CONFIG[template]
+        if (!templateConfig) {
+            throw new Error(`Invalid template: ${template}. Must be SINGLE_PAGE, MULTI_PAGE, or ONBOARDING`)
+        }
+        const layout = default_language === 'en' ? templateConfig.LAYOUT.ENGLISH : templateConfig.LAYOUT.FRENCH
         
-        logMessage(`📖 Selected layout: ${is_single_page ? 'Single-page' : 'Multi-page'} ${default_language.toUpperCase()}`, 'info')
+        logMessage(`📖 Selected layout: ${template} ${default_language.toUpperCase()}`, 'info')
                
         // Create items based on the default language layout (skip home page)
         logMessage(`📄 Creating ${default_language.toUpperCase()} items...`, 'progress')
@@ -417,8 +299,8 @@ async function setupItems(is_single_page, default_language, is_bilingual, add_pa
             logMessage(`🗂️ Creating ${otherLanguage} navigation structure...`, 'progress')
             
             const otherLanguageLayout = default_language === 'en' 
-                ? (is_single_page ? CONFIG.SINGLE_PAGE.LAYOUT.FRENCH : CONFIG.MULTI_PAGE.LAYOUT.FRENCH)
-                : (is_single_page ? CONFIG.SINGLE_PAGE.LAYOUT.ENGLISH : CONFIG.MULTI_PAGE.LAYOUT.ENGLISH)
+                ? templateConfig.LAYOUT.FRENCH
+                : templateConfig.LAYOUT.ENGLISH
             
             const navName = default_language === 'en' ? "Navigation Française" : "English Navigation"
             const navSlug = default_language === 'en' ? "nav-francaise" : "english-navigation"
@@ -903,7 +785,7 @@ async function updatePageStructure(pages){
         throw error
     }
 }
-async function assistWithBuild(is_single_page) {
+async function assistWithBuild(template) {
 
     logMessage(`🛠️ Assist with build mode activated - click on a page in the list to log its data`, 'info')
 
@@ -920,12 +802,12 @@ async function assistWithBuild(is_single_page) {
             
             // Go through config's layout and find a page that matches the name. Also check children
             const target_page_id = findPageIdByName(
-                is_single_page ? CONFIG.SINGLE_PAGE : CONFIG.MULTI_PAGE, 
+                CONFIG[template], 
                 current_page_name, 
                 detected_language
             )
             if (!target_page_id) {
-                console.error(`Failed to find page ${current_page_name} in the configuration for ${is_single_page ? 'single' : 'multi'} page layout`)
+                console.error(`Failed to find page ${current_page_name} in the configuration for ${template} template`)
                 return
             }
             const target_page_data = await getItemData(target_page_id)
@@ -1019,7 +901,7 @@ function searchItemsForName(items, name) {
 
 /** 
  * Main function to run the site setup 
- * @param {boolean} is_single_page - Flag indicating if the site is single-page
+ * @param {string} template - The template type ('SINGLE_PAGE', 'MULTI_PAGE', 'ONBOARDING')
  * @param {boolean} update_settings - Flag indicating if site settings should be updated
  * @param {boolean} add_pages - Flag indicating if pages should be added
  * @param {string} default_language - The default language for the site [en|fr]
@@ -1027,13 +909,17 @@ function searchItemsForName(items, name) {
  * @param {boolean} remove_other_pages - Flag indicating if other pages should be removed
  * @param {boolean} refresh_after - Flag indicating if page should refresh after completion
  */
-async function run(is_single_page = true, update_settings = true, add_pages = true, default_language = 'en', is_bilingual = true, remove_other_pages = true, refresh_after = true) {
+async function run(template = 'SINGLE_PAGE', update_settings = true, add_pages = true, default_language = 'en', is_bilingual = true, remove_other_pages = true, refresh_after = true) {
 
     logMessage(`🎯 Initializing site setup automation...`, 'info')
-    logMessage(`📋 Parameters: ${is_single_page ? 'Single-page' : 'Multi-page'} | ${default_language.toUpperCase()} | ${is_bilingual ? 'Bilingual' : 'Single language'}`, 'info')
+    logMessage(`📋 Parameters: ${template} | ${default_language.toUpperCase()} | ${is_bilingual ? 'Bilingual' : 'Single language'}`, 'info')
     try {
         logMessage(`📡 Fetching site data...`, 'progress')
-        const site_data = await getSiteData(is_single_page ? CONFIG.SINGLE_PAGE.SITE_ID : CONFIG.MULTI_PAGE.SITE_ID)
+        const templateConfig = CONFIG[template]
+        if (!templateConfig) {
+            throw new Error(`Invalid template: ${template}. Must be SINGLE_PAGE, MULTI_PAGE, or ONBOARDING`)
+        }
+        const site_data = await getSiteData(templateConfig.SITE_ID)
         logMessage(`✅ Site data retrieved successfully`, 'success')
 
         if (update_settings) {
@@ -1066,11 +952,10 @@ async function run(is_single_page = true, update_settings = true, add_pages = tr
         }
 
         if(add_pages)
-            await setupItems(is_single_page, default_language, add_pages, is_bilingual, remove_other_pages, refresh_after)
+            await setupItems(template, default_language, add_pages, is_bilingual, remove_other_pages, refresh_after)
            
 
-        const siteType = is_single_page ? 'Single-page' : 'Multi-page'
-        logMessage(`🏆 ${siteType} site setup completed successfully!`, 'success')
+        logMessage(`🏆 ${template} site setup completed successfully!`, 'success')
              
 
         // Show custom refresh confirmation dialog
@@ -1342,11 +1227,12 @@ function createConfigDialog() {
 
                 <div id="siteTypeOptions" style="margin-bottom: 20px;">
                     <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #555;">
-                        📄 Site Type:
+                        📄 Template:
                     </label>
-                    <select id="siteType" style="width: 100%; padding: 8px; border: 2px solid #ddd; border-radius: 6px; font-size: 14px;">
-                        <option value="true">Single Page Site</option>
-                        <option value="false">Multi Page Site</option>
+                    <select id="siteTemplate" style="width: 100%; padding: 8px; border: 2px solid #ddd; border-radius: 6px; font-size: 14px;">
+                        <option value="SINGLE_PAGE">Single Page Site</option>
+                        <option value="MULTI_PAGE">Multi Page Site</option>
+                        <option value="ONBOARDING">Onboarding</option>
                     </select>
                 </div>
 
@@ -1456,7 +1342,7 @@ function closeConfigDialog() {
 async function executeWithConfig() {
     try {
         // Get configuration values BEFORE closing the dialog
-        const isSinglePage = document.getElementById('siteType').value === 'true';
+        const template = document.getElementById('siteTemplate').value;
         const defaultLanguage = document.getElementById('defaultLanguage').value;
         const isBilingual = document.getElementById('isBilingual').checked;
         const executionMode = document.getElementById('executionMode').value;
@@ -1473,20 +1359,20 @@ async function executeWithConfig() {
         createLogDialog();
         
         logMessage('🎯 Starting execution with configuration:', 'info');
-        logMessage(`   📄 Site Type: ${isSinglePage ? 'Single Page' : 'Multi Page'}`, 'info');
+        logMessage(`   📄 Template: ${template}`, 'info');
         logMessage(`   🌐 Language: ${defaultLanguage.toUpperCase()}`, 'info');
         logMessage(`   🗣️ Bilingual: ${isBilingual ? 'Yes' : 'No'}`, 'info');
         logMessage(`   🎯 Mode: ${executionMode}`, 'info');
         
         if (executionMode === 'run') {
             logMessage(`   🔧 Update Settings: ${updateSettings ? 'Yes' : 'No'}`, 'info');
-            logMessage(`   � Add Pages: ${addPages ? 'Yes' : 'No'}`, 'info');
+            logMessage(`   📄 Add Pages: ${addPages ? 'Yes' : 'No'}`, 'info');
             logMessage(`   🗑️ Remove Other Pages: ${removeOtherPages ? 'Yes' : 'No'}`, 'info');
             logMessage(`   🔄 Refresh Confirmation: Will show completion dialog`, 'info');
             
-            await run(isSinglePage, updateSettings, addPages, defaultLanguage, isBilingual, removeOtherPages, true);
+            await run(template, updateSettings, addPages, defaultLanguage, isBilingual, removeOtherPages, true);
         } else {
-            await assistWithBuild(isSinglePage);
+            await assistWithBuild(template);
         }
         
     } catch (error) {
