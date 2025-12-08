@@ -74,7 +74,7 @@ const CONFIG = {
         SITE_ID: '69137fa3503e5dbdab03b1e5',
         LAYOUT: {
             ENGLISH: [
-                { type: "home", name: "Home", id: '69137fc0503e5dbdab03b200' },
+                { type: "home_alt", name: "Home", id: '69137fc0503e5dbdab03b200' },
                 { type: "members", name: "Your Team", id: '69137fef53b64096afc80cc8' },
                 { type: "blog", name: "Insights & Articles", id: '69137ff153b64096afc80cce' },
                 { type: "standard", name: "Client Centre", id: '69137ff253b64096afc80cd2' },
