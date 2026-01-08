@@ -278,7 +278,6 @@ async function crawlSites(advisors_list, options = {}) {
         on_error = null
     } = options
     
-    const tracker = new StaffTracker()
     const site_data = []
     let count = 0
     
@@ -302,7 +301,6 @@ async function crawlSites(advisors_list, options = {}) {
         }
         
         const site_name = advisor.display_name || "N/A"
-        const is_published = advisor.published_date === "NA" ? "No" : "Yes"
         const tags = advisor.settings.broker_tags.map(tag => tag.name).join(', ') || "N/A"
         
         const id = advisor._id
@@ -324,7 +322,7 @@ async function crawlSites(advisors_list, options = {}) {
                 pages_response.json()
             ])
             
-            const domains = siteSettings.settings.domains || []
+            const domains = site_settings_data.settings.domains || []
             const domain_list = domains.length > 0 ? domains.join(', ') : "N/A"
             
             // Filter for active pages
@@ -348,7 +346,6 @@ async function crawlSites(advisors_list, options = {}) {
             // Store site metadata
             const site_info = {
                 name: site_name,
-                is_published,
                 tags,
                 domains,
                 domain_list,
@@ -363,7 +360,6 @@ async function crawlSites(advisors_list, options = {}) {
                     
                     const page_emails = extractEmails(page.content)
                     for (const email of page_emails) {
-                        tracker.addOrUpdate("", "", email, site_name, source_label, domains)
                         site_info.staff.push({ name: "", title: "", email, source: source_label })
                     }
                 } catch (error) {
@@ -397,17 +393,14 @@ async function crawlSites(advisors_list, options = {}) {
                         
                         if (emails.length > 0) {
                             // Add member with first email
-                            tracker.addOrUpdate(member.name, member.title, emails[0], site_name, "Member Page", domains)
                             site_info.staff.push({ name: member.name, title: member.title, email: emails[0], source: "Member Page" })
                             
                             // Add additional emails
                             for (let i = 1; i < emails.length; i++) {
-                                tracker.addOrUpdate("", "", emails[i], site_name, "Member Page", domains)
                                 site_info.staff.push({ name: "", title: "", email: emails[i], source: "Member Page" })
                             }
                         } else if (member.name) {
                             // Add member without email
-                            tracker.addOrUpdate(member.name, member.title, "", site_name, "Member Page", domains)
                             site_info.staff.push({ name: member.name, title: member.title, email: "", source: "Member Page" })
                         }
                     }
@@ -415,7 +408,6 @@ async function crawlSites(advisors_list, options = {}) {
                     // Extract emails from page content
                     const page_emails = extractEmails(page.content)
                     for (const email of page_emails) {
-                        tracker.addOrUpdate("", "", email, site_name, "Member Page", domains)
                         site_info.staff.push({ name: "", title: "", email, source: "Member Page" })
                     }
                 } catch (error) {
@@ -444,10 +436,33 @@ async function crawlSites(advisors_list, options = {}) {
     }
     
     return {
-        tracker,
         site_data,
         total_sites: count
     }
+}
+
+// ====================================
+// Data Aggregation
+// ====================================
+
+// Build StaffTracker from raw site data
+function buildStaffTracker(site_data) {
+    const tracker = new StaffTracker()
+    
+    for (const site of site_data) {
+        for (const staff of site.staff) {
+            tracker.addOrUpdate(
+                staff.name,
+                staff.title,
+                staff.email,
+                site.name,
+                staff.source,
+                site.domains
+            )
+        }
+    }
+    
+    return tracker
 }
 
 // ====================================
@@ -455,16 +470,15 @@ async function crawlSites(advisors_list, options = {}) {
 // ====================================
 
 // Format 1: List all sites and who's on them (like AdvisorsOnProgram.js)
-function formatBySite(crawl_results) {
-    const { site_data } = crawl_results
-    let output = "Tradename\tPublished\tTags\tDomains\tSource\tStaff Name\tTitle\tEmail\tEquivalent Emails"
+function formatBySite(site_data) {
+    let output = "Tradename\tTags\tDomains\tSource\tStaff Name\tTitle\tEmail\tEquivalent Emails"
     
     for (const site of site_data) {
         if (site.staff.length === 0) {
-            output += `\n${site.name}\t${site.is_published}\t${site.tags}\t${site.domain_list}\tNO MEMBERS FOUND`
+            output += `\n${site.name}\t${site.tags}\t${site.domain_list}\tNO MEMBERS FOUND`
         } else {
             for (const member of site.staff) {
-                output += `\n${site.name}\t${site.is_published}\t${site.tags}\t${site.domain_list}\t${member.source}\t${member.name}\t${member.title}\t${member.email}\t`
+                output += `\n${site.name}\t${site.tags}\t${site.domain_list}\t${member.source}\t${member.name}\t${member.title}\t${member.email}\t`
             }
         }
     }
@@ -473,8 +487,8 @@ function formatBySite(crawl_results) {
 }
 
 // Format 2: List all staff and what sites they're on (like StaffAcrossSites.js)
-function formatByStaff(crawl_results) {
-    const { tracker } = crawl_results
+function formatByStaff(site_data) {
+    const tracker = buildStaffTracker(site_data)
     let output = "Staff Name\tEmail\tTitle(s)\t# of Sites\tSites\tDomains\tEquivalent Emails"
     
     for (const staff_member of tracker.getAllStaff()) {
@@ -506,19 +520,19 @@ let advisors_list = advisor_list
 // Choose output format:
 // 'by-site' - List all sites and who's on them
 // 'by-staff' - List all staff and what sites they're on
-const OUTPUT_FORMAT = 'by-site' // Change to 'by-staff' or 'by-site' for the other format
+const OUTPUT_FORMAT = 'by-staff' // Change to 'by-staff' or 'by-site' for the other formats
 
 // Crawl all sites
-const results = await crawlSites(advisors_list, {
-    include_unpublished: false //OUTPUT_FORMAT === 'by-site' // Only for by-site format
+const { site_data } = await crawlSites(advisors_list, {
+    include_unpublished: false
 })
 
-// Format and output results
+// Format and output results based on selected format
 let output = ""
 if (OUTPUT_FORMAT === 'by-site') {
-    output = formatBySite(results)
+    output = formatBySite(site_data)
 } else if (OUTPUT_FORMAT === 'by-staff') {
-    output = formatByStaff(results)
+    output = formatByStaff(site_data)
 }
 
 console.log(output)
