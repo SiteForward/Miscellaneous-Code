@@ -442,34 +442,10 @@ async function crawlSites(advisors_list, options = {}) {
 }
 
 // ====================================
-// Data Aggregation
-// ====================================
-
-// Build StaffTracker from raw site data
-function buildStaffTracker(site_data) {
-    const tracker = new StaffTracker()
-    
-    for (const site of site_data) {
-        for (const staff of site.staff) {
-            tracker.addOrUpdate(
-                staff.name,
-                staff.title,
-                staff.email,
-                site.name,
-                staff.source,
-                site.domains
-            )
-        }
-    }
-    
-    return tracker
-}
-
-// ====================================
 // Output Formatters
 // ====================================
 
-// Format 1: List all sites and who's on them (like AdvisorsOnProgram.js)
+// Format 1: List all sites and who's on them
 function formatBySite(site_data) {
     let output = "Tradename\tTags\tDomains\tSource\tStaff Name\tTitle\tEmail\tEquivalent Emails"
     
@@ -486,9 +462,23 @@ function formatBySite(site_data) {
     return output
 }
 
-// Format 2: List all staff and what sites they're on (like StaffAcrossSites.js)
+// Format 2: List all staff and what sites they're on
 function formatByStaff(site_data) {
-    const tracker = buildStaffTracker(site_data)
+
+    const tracker = new StaffTracker()
+    for (const site of site_data) {
+        for (const staff of site.staff) {
+            tracker.addOrUpdate(
+                staff.name,
+                staff.title,
+                staff.email,
+                site.name,
+                staff.source,
+                site.domains
+            )
+        }
+    }
+
     let output = "Staff Name\tEmail\tTitle(s)\t# of Sites\tSites\tDomains\tEquivalent Emails"
     
     for (const staff_member of tracker.getAllStaff()) {
