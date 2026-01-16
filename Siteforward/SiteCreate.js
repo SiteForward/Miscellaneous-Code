@@ -76,15 +76,15 @@ const CONFIG = {
             ENGLISH: [
                 { type: "home_alt", name: "Home", id: '69137fc0503e5dbdab03b200' },
                 { type: "members", name: "Your Team", id: '69137fef53b64096afc80cc8' },
-                { type: "blog", name: "Insights & Articles", id: '69137ff153b64096afc80cce' },
+                { type: "blog", name: "Insights & Articles", id: '69137ff153b64096afc80cce', external_feed: "https://SiteForward.ca/rss-feed/feed.xml" },
                 { type: "standard", name: "Client Centre", id: '69137ff253b64096afc80cd2' },
                 { type: "standard", name: "Contact", id: '69137ff353b64096afc80cd4' },
-                { type: "redirect", name: "Client Login", id: '69137ff353b64096afc80cd5', url: "https://manulifewealth.ca/clients/en/sign-in" },
+                { type: "redirect", name: "Client Login", style: "button", id: '69137ff353b64096afc80cd5', url: "https://manulifewealth.ca/clients/en/sign-in" },
             ],
             FRENCH: [
                 { type: "home_alt", name: "Accueil", id: '69137ff653b64096afc80ce0' },
                 { type: "members", name: "Notre équipe", id: '69137ff753b64096afc80ce3' },
-                { type: "blog", name: "Articles", id: '69137ff853b64096afc80cea' },
+                { type: "blog", name: "Articles", id: '69137ff853b64096afc80cea', external_feed: "https://SiteForward.ca/rss-french-feed/feed.xml" },
                 { type: "standard", name: "Centre client", id: '69137ff953b64096afc80ced' },
                 { type: "standard", name: "Contact", id: '69137ffa53b64096afc80cf0' },    
                 { type: "redirect", name: "Accès du client", style: "button", url: "https://manulifewealth.ca/clients/fr/sign-in" }
@@ -952,7 +952,7 @@ async function run(template = 'SINGLE_PAGE', update_settings = true, add_pages =
         }
 
         if(add_pages)
-            await setupItems(template, default_language, add_pages, is_bilingual, remove_other_pages, refresh_after)
+            await setupItems(template, default_language, is_bilingual, add_pages, remove_other_pages, refresh_after)
            
 
         logMessage(`🏆 ${template} site setup completed successfully!`, 'success')
